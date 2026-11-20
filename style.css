@@ -1,8 +1,23 @@
 /* Simulasi ASAS Kelas 7 — style.css (khusus halaman ini saja)
    Base: ../../assets/css/main.css. Palet Biru Samudra tidak diubah di sini. */
 
-/* Navigasi bagian: menempel di bawah topnav, bisa digeser horizontal di HP */
-.subnav{position:sticky;top:57px;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+/* Header sederhana tanpa nav (situs khusus simulasi) */
+.site-header{border-bottom:1px solid var(--line);background:var(--card)}
+.site-header .wrap{padding-top:12px;padding-bottom:12px}
+.site-title{margin:0;font-weight:800;font-size:clamp(.95rem,3.4vw,1.1rem);display:flex;align-items:center;gap:9px}
+
+/* Pilih Kelas */
+.kelas-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kelas-card{font-family:inherit;text-align:left;cursor:pointer;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px;min-height:var(--tap);color:var(--ink)}
+.kelas-card strong{display:block;font-size:1.1rem}
+.kelas-card span{display:block;margin-top:4px;font-size:.88rem;color:var(--muted)}
+.kelas-card:hover:not(:disabled){border-color:var(--teal)}
+.kelas-card[aria-pressed="true"]{border-color:var(--teal);border-width:2.5px;background:var(--teal-soft);outline:3px solid color-mix(in srgb,var(--teal) 35%,transparent);outline-offset:2px}
+.kelas-card:disabled{opacity:.55;cursor:not-allowed;background:var(--bg2)}
+@media (max-width:640px){ .kelas-picker{grid-template-columns:1fr} }
+
+/* Navigasi bagian: menempel di atas, bisa digeser horizontal di HP */
+.subnav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .subnav-inner{max-width:var(--wrap);margin:0 auto;padding:10px 20px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .subnav-inner::-webkit-scrollbar{display:none}
 .subnav a{flex:0 0 auto;text-decoration:none;color:var(--ink);font-size:.85rem;font-weight:700;padding:9px 13px;min-height:var(--tap);display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);white-space:nowrap}
@@ -19,7 +34,7 @@
 @media (min-width:768px){ .form-grid{grid-template-columns:1fr 1fr} }
 
 /* Timer bar: menempel di atas selama ujian */
-.timer-bar{position:sticky;top:57px;z-index:50;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:var(--shadow)}
+.timer-bar{position:sticky;top:0;z-index:50;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:var(--shadow)}
 .timer-bar-inner{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .timer-left{display:flex;gap:10px;align-items:baseline}
 .timer-label{font-size:.85rem;color:var(--muted);font-weight:700}
@@ -93,8 +108,27 @@
   .isian-row .soal-q{flex:1 1 auto}
 }
 @media (max-width:480px){
-  .subnav{top:53px}
+  .subnav{top:0}
   .subnav-inner{padding:8px 16px}
-  .timer-bar{top:53px}
+  .timer-bar{top:0}
   #timerText{font-size:1.25rem}
 }
+
+/* Kartu info ala layar mulai (40 soal / 120 menit / 80 bank / 30 otomatis) */
+.info-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:0 0 20px}
+@media (min-width:768px){ .info-cards{grid-template-columns:repeat(4,1fr)} }
+.info-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+.info-num{display:block;font-size:1.9rem;font-weight:800;color:var(--teal);line-height:1.1}
+.info-label{display:block;font-size:.85rem;color:var(--muted);font-weight:700;margin-top:4px}
+
+/* Gambar soal (SVG garis bilangan, dsb.) */
+.question-image{display:block;width:100%;max-width:480px;margin:12px auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
+
+/* Label verdict di pembahasan */
+.verdict-correct{color:var(--teal)}
+.verdict-wrong{color:var(--coral)}
+.verdict-empty{color:var(--muted)}
+.verdict-self{color:var(--muted)}
+.ok-text{color:var(--teal)}
+.no-text{color:var(--coral)}
+.jawaban-siswa{white-space:pre-wrap}

@@ -22,12 +22,12 @@ Kalau langkah ini belum dilakukan, simulasi tetap bisa dipakai — nilai hanya t
 
 | A | B | C | D | E | F | G | H | I | J | K | L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Waktu | Nama | Kelas | Skor PG | Skor Benar-Salah | Skor Menjodohkan | Skor Isian | Skor Uraian | Total | Nilai | Durasi (menit) | Status |
+| Waktu | Nama | Kelas | PG Benar | Benar-Salah Benar | Menjodohkan Benar | Total Benar Otomatis | Nilai | Durasi (menit) | Status | Isian Dijawab | Uraian Dijawab |
 
 Tips: salin baris di bawah ini, lalu tempel di sel A1 (Google Sheets akan membaginya ke kolom-kolom):
 
 ```
-Waktu	Nama	Kelas	Skor PG	Skor Benar-Salah	Skor Menjodohkan	Skor Isian	Skor Uraian	Total	Nilai	Durasi (menit)	Status
+Waktu	Nama	Kelas	PG Benar	Benar-Salah Benar	Menjodohkan Benar	Total Benar Otomatis	Nilai	Durasi (menit)	Status	Isian Dijawab	Uraian Dijawab
 ```
 
 ## Langkah 2 — Tempel kode Apps Script
@@ -64,16 +64,16 @@ Waktu	Nama	Kelas	Skor PG	Skor Benar-Salah	Skor Menjodohkan	Skor Isian	Skor Uraia
 
 ## Langkah 5 — Uji dengan satu simulasi
 
-1. Kerjakan satu simulasi sampai selesai (isi nama, jawab beberapa soal, kumpulkan, isi skor uraian, lihat hasil akhir).
+1. Kerjakan satu simulasi sampai selesai (isi nama, jawab beberapa soal, kumpulkan, lihat hasil akhir).
 2. Di halaman hasil, status pengiriman harus tertulis **"Terkirim ke Google Sheets ✓"**.
-3. Buka Google Sheet — harus ada satu baris baru berisi nama, kelas, skor per bagian, total/100, durasi, dan status Tuntas/Belum Tuntas (KKM 70).
+3. Buka Google Sheet — harus ada satu baris baru berisi nama, kelas, jumlah benar per tipe otomatis, Total Benar Otomatis, Nilai /100, durasi, status Tuntas/Belum Tuntas (KKM 70), dan jumlah Isian/Uraian yang dijawab.
 4. Kalau status tertulis **"Gagal terkirim"**, periksa koneksi internet lalu tekan **"Kirim Ulang ke Google Sheets"**. Data yang gagal tersimpan di perangkat dan bisa dikirim ulang.
 
 ## Langkah 6 — Memakai hasilnya
 
 - Setiap siswa yang selesai = satu baris baru di Sheet, lengkap dengan waktu pengerjaan.
 - Di Sheet, guru bisa memakai **Data → Sort / Filter** untuk mengurutkan per kelas atau per nilai, dan **File → Download** bila ingin diolah di Excel.
-- Kolom **Total** dan **Nilai** sama-sama berisi skor /100; **Status** berisi `Tuntas` bila total ≥ 70, `Belum Tuntas` bila di bawah itu.
+- Kolom **Nilai** berisi skor /100, dihitung dari jawaban benar otomatis: Nilai = Total Benar Otomatis / 30 × 100; **Status** berisi `Tuntas` bila Nilai ≥ 70, `Belum Tuntas` bila di bawah itu. Kolom **Isian Dijawab** dan **Uraian Dijawab** hanya mencatat berapa soal yang diisi — isian dan uraian dicek mandiri dan tidak masuk Nilai.
 
 ---
 
@@ -81,6 +81,6 @@ Waktu	Nama	Kelas	Skor PG	Skor Benar-Salah	Skor Menjodohkan	Skor Isian	Skor Uraia
 
 - **Jangan bagikan URL Web App ke publik secara sembarangan.** Siapa pun yang punya URL itu bisa mengirim baris ke Sheet Anda. Cukup dibagikan ke siswa lewat halaman simulasi / perangkat kelas.
 - **Nilai hanya terkirim bila ada internet** saat hasil akhir tampil. Bila offline saat mengumpulkan, halaman menyimpan datanya dan menyediakan tombol Kirim Ulang.
-- **Skor uraian adalah penilaian mandiri siswa** (0–6 per soal, sesuai rubrik di halaman). Guru tetap bisa memeriksa ulang dari jawaban siswa bila perlu — jawaban uraian tidak dikirim ke Sheet, hanya skornya.
+- **Isian Singkat dan Uraian dicek mandiri** di halaman hasil (kunci + pembahasan ditampilkan) dan tidak masuk Nilai. Jawaban isian/uraian tidak dikirim ke Sheet, hanya jumlah soal yang dijawab.
 - **Riwayat di perangkat siswa tetap ada** walaupun Sheet sudah diatur: riwayat skor di halaman memakai penyimpanan perangkat, sedangkan Sheet adalah rekap pusat untuk guru.
 - Bila URL Web App diganti (misalnya Sheet baru), ulangi Langkah 4 dengan URL baru.

@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="description" content="Simulasi ASAS Matematika SMP Kelas 7 — 40 soal, timer 120 menit, nilai otomatis, riwayat skor, dan pengiriman nilai ke Google Sheets." />
+<meta name="description" content="Simulasi ASAS Matematika SMP Kelas 7 — 40 soal per sesi dari bank 80 soal, timer 120 menit, nilai otomatis, riwayat skor, dan pengiriman nilai ke Google Sheets." />
 <link rel="icon" href="data:," />
-<title>Simulasi ASAS — Matematika Kelas 7 · MPI Matematika SMP</title>
+<title>Simulasi ASAS SMP Negeri 2 Sendang Agung — Matematika Kelas VII</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
@@ -16,31 +16,23 @@
 <body>
 <a class="skip-link" href="#utama">Lewati ke konten utama</a>
 
-<nav class="topnav" aria-label="Navigasi utama">
-  <div class="topnav-inner">
-    <a class="brand" href="index.html"><span class="brand-badge">∑</span> Simulasi ASAS Matematika SMP</a>
-    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Buka menu">☰</button>
-    <div class="navlinks" data-nav-links>
-      <a href="index.html">Beranda</a>
-      <a href="https://holizon-sendang.github.io/MPI/kelas-7/index.html">Kelas 7 (MPI)</a>
-      <a href="https://holizon-sendang.github.io/MPI/kelas-7/latihan-asas/index.html">Latihan ASAS</a>
-      <a href="https://holizon-sendang.github.io/MPI/">MPI Matematika</a>
-    </div>
+<header class="site-header">
+  <div class="wrap">
+    <p class="site-title"><span class="brand-badge">∑</span> Simulasi ASAS SMP Negeri 2 Sendang Agung</p>
   </div>
-</nav>
+</header>
 
 <header class="hero module-hero">
   <div class="wrap">
-    <span class="eyebrow">SIMULASI ASAS · KELAS 7 · 120 MENIT · MGMP LAMPUNG TENGAH</span>
-    <h1>Simulasi ASAS — Matematika Kelas 7</h1>
-    <p class="lead"><strong>MGMP Matematika SMP Kabupaten Lampung Tengah</strong> — Asesmen Sumatif Akhir Semester (ASAS), Tahun Pelajaran 2025/2026. Soal yang sama dengan Latihan ASAS Kelas 7, dikerjakan dalam suasana ujian: timer 120 menit, jawaban otomatis terkumpul saat waktu habis.</p>
+    <span class="eyebrow">SIMULASI ASAS · MATEMATIKA · KELAS VII · 120 MENIT · MGMP LAMPUNG TENGAH</span>
+    <h1>Simulasi ASAS SMP Negeri 2 Sendang Agung</h1>
+    <p class="lead">Matematika — Kelas VII (Kelas VIII dan IX segera hadir)</p>
+    <p class="lead"><strong>MGMP Matematika SMP Kabupaten Lampung Tengah</strong> — Asesmen Sumatif Akhir Semester (ASAS), Tahun Pelajaran 2025/2026. Dikerjakan dalam suasana ujian: timer 120 menit, jawaban otomatis terkumpul saat waktu habis.</p>
     <div class="tp-box">
-      <p><strong>Yang akan kamu kerjakan:</strong> 40 soal Semester 1 Kelas 7 — bilangan bulat, bilangan rasional, aritmetika sosial, dan perbandingan — dalam satu alur ujian. Nilai otomatis untuk 35 soal, uraian dinilai mandiri, total maksimal 100.</p>
+      <p><strong>Yang akan kamu kerjakan:</strong> 40 soal per sesi dari bank 80 soal Kelas 7 — bilangan bulat, bilangan rasional, aritmetika sosial, dan rasio — dalam satu alur ujian. Tiap sesi soalnya diacak: 1 varian untuk tiap indikator. Nilai = jawaban benar otomatis / 30 × 100; isian dan uraian dicek mandiri.</p>
     </div>
     <div class="hero-cta" style="margin-top:16px">
-      <a class="btn btn-primary" href="#layarMulai">Mulai Simulasi ↓</a>
-      <a class="btn btn-ghost" href="https://holizon-sendang.github.io/MPI/kelas-7/latihan-asas/index.html">Latihan ASAS (tanpa timer)</a>
-      <a class="btn btn-ghost" href="https://holizon-sendang.github.io/MPI/kelas-7/index.html">Daftar Modul Kelas 7</a>
+      <a class="btn btn-primary" href="#pilihKelas">Mulai Simulasi ↓</a>
     </div>
   </div>
 </header>
@@ -50,10 +42,31 @@
 
 <!-- ================= LAYAR MULAI ================= -->
 <section id="layarMulai" aria-labelledby="judul-mulai">
+  <div class="info-cards">
+    <div class="info-card"><span class="info-num">40</span><span class="info-label">Soal per sesi</span></div>
+    <div class="info-card"><span class="info-num">120</span><span class="info-label">Menit</span></div>
+    <div class="info-card"><span class="info-num">80</span><span class="info-label">Soal di bank soal</span></div>
+    <div class="info-card"><span class="info-num">30</span><span class="info-label">Soal dinilai otomatis</span></div>
+  </div>
+
+  <section id="pilihKelas" aria-labelledby="judul-pilih-kelas">
+    <div class="sec-head">
+      <span class="sec-num">Langkah 1</span>
+      <h2 id="judul-pilih-kelas">Pilih Kelas</h2>
+    </div>
+    <div class="kelas-picker" role="group" aria-label="Pilih kelas">
+      <button type="button" class="kelas-card" data-kelas="7" aria-pressed="true"><strong>Kelas 7</strong><span>Matematika · Aktif</span></button>
+      <button type="button" class="kelas-card" data-kelas="8" disabled aria-pressed="false"><strong>Kelas 8</strong><span>Segera hadir</span></button>
+      <button type="button" class="kelas-card" data-kelas="9" disabled aria-pressed="false"><strong>Kelas 9</strong><span>Segera hadir</span></button>
+    </div>
+    <p id="kelasInfo" class="muted" style="margin-top:12px">Kelas 7: Bilangan Bulat, Bilangan Rasional, Aritmetika Sosial, dan Rasio.</p>
+    <p class="muted small">Kelas 8 dan 9 segera hadir.</p>
+  </section>
+
   <div class="sec-head">
-    <span class="sec-num">Layar mulai · Isi identitas dulu</span>
-    <h2 id="judul-mulai">Siap Simulasi?</h2>
-    <p>Waktu pengerjaan <strong>120 menit</strong>. Timer berjalan sejak tombol ditekan dan jawaban otomatis dikumpulkan saat waktu habis. Jangan tutup atau muat ulang halaman sembarangan — jawaban dan sisa waktu tersimpan otomatis di perangkat ini.</p>
+    <span class="sec-num">Langkah 2 · Isi identitas dulu</span>
+    <h2 id="judul-mulai">Mulai Simulasi</h2>
+    <p>Waktu pengerjaan 120 menit. Timer berjalan sejak tombol ditekan dan jawaban otomatis dikumpulkan saat waktu habis. Jangan tutup atau muat ulang halaman sembarangan — jawaban dan sisa waktu tersimpan otomatis di perangkat ini.</p>
   </div>
 
   <div class="card">
@@ -83,9 +96,9 @@
         <thead><tr><th>Materi</th><th class="num">Jumlah Soal</th></tr></thead>
         <tbody>
           <tr><td>Bilangan Bulat</td><td class="num">12</td></tr>
-          <tr><td>Bilangan Rasional</td><td class="num">10</td></tr>
-          <tr><td>Aritmetika Sosial</td><td class="num">8</td></tr>
-          <tr><td>Perbandingan</td><td class="num">10</td></tr>
+          <tr><td>Bilangan Rasional</td><td class="num">12</td></tr>
+          <tr><td>Aritmetika Sosial</td><td class="num">6</td></tr>
+          <tr><td>Rasio</td><td class="num">10</td></tr>
           <tr><td><strong>Total</strong></td><td class="num"><strong>40</strong></td></tr>
         </tbody>
       </table>
@@ -94,15 +107,15 @@
       <table>
         <thead><tr><th>Tipe Soal</th><th class="num">Jumlah</th><th>Penilaian</th></tr></thead>
         <tbody>
-          <tr><td>Pilihan Ganda</td><td class="num">20</td><td>Otomatis (2 poin/soal)</td></tr>
-          <tr><td>Benar-Salah</td><td class="num">5</td><td>Otomatis (2 poin/soal)</td></tr>
-          <tr><td>Menjodohkan</td><td class="num">5</td><td>Otomatis (2 poin/soal)</td></tr>
-          <tr><td>Isian Singkat</td><td class="num">5</td><td>Otomatis (2 poin/soal)</td></tr>
-          <tr><td>Uraian</td><td class="num">5</td><td>Cek mandiri (0–6/soal)</td></tr>
+          <tr><td>Pilihan Ganda</td><td class="num">20</td><td>Otomatis</td></tr>
+          <tr><td>Benar-Salah</td><td class="num">5</td><td>Otomatis</td></tr>
+          <tr><td>Menjodohkan</td><td class="num">5</td><td>Otomatis</td></tr>
+          <tr><td>Isian Singkat</td><td class="num">5</td><td>Cek mandiri</td></tr>
+          <tr><td>Uraian</td><td class="num">5</td><td>Cek mandiri</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="muted small" style="margin:10px 0 0">Skor otomatis dihitung dari 35 soal (Pilihan Ganda, Benar-Salah, Menjodohkan, Isian Singkat) — maksimal 70. Uraian dicek mandiri dengan kunci dan pembahasan setelah dikumpulkan — maksimal 30. <strong>Total maksimal 100, KKM 70.</strong></p>
+    <p class="muted small" style="margin:10px 0 0">Skor dihitung dari 30 soal yang dinilai otomatis (Pilihan Ganda, Benar-Salah, dan Menjodohkan): Nilai = jawaban benar / 30 × 100. Isian Singkat dan Uraian dicek mandiri dengan kunci jawaban dan pembahasan setelah selesai — tidak masuk nilai. <strong>KKM 70.</strong></p>
   </div>
 
   <div class="card" style="margin-top:16px">
@@ -145,39 +158,30 @@
   </nav>
 
   <section id="ujian1" aria-labelledby="judul-ujian1">
-    <div class="sec-head"><span class="sec-num">Bagian I · Soal 1–20 · 2 poin per soal</span><h2 id="judul-ujian1">Pilihan Ganda</h2><p>Pilihlah satu jawaban yang paling tepat (A, B, C, atau D). Skor maksimal bagian ini <strong>40</strong>.</p></div>
+    <div class="sec-head"><span class="sec-num">Bagian I · Soal 1–20</span><h2 id="judul-ujian1">Pilihan Ganda</h2><p>Pilihlah satu jawaban yang paling tepat (A, B, C, atau D).</p></div>
     <div class="card"><div id="pgBox" class="stack"></div></div>
   </section>
 
   <section id="ujian2" aria-labelledby="judul-ujian2">
-    <div class="sec-head"><span class="sec-num">Bagian II · Soal 21–25 · 2 poin per soal</span><h2 id="judul-ujian2">Benar / Salah</h2><p>Lingkari pilihan <strong>BENAR</strong> atau <strong>SALAH</strong> pada tiap pernyataan. Skor maksimal bagian ini <strong>10</strong>.</p></div>
+    <div class="sec-head"><span class="sec-num">Bagian II · Soal 21–25</span><h2 id="judul-ujian2">Benar / Salah</h2><p>Lingkari pilihan <strong>BENAR</strong> atau <strong>SALAH</strong> pada tiap pernyataan.</p></div>
     <div class="card"><div id="bsBox" class="stack"></div></div>
   </section>
 
   <section id="ujian3" aria-labelledby="judul-ujian3">
-    <div class="sec-head"><span class="sec-num">Bagian III · Soal 26–30 · 2 poin per soal</span><h2 id="judul-ujian3">Menjodohkan</h2><p>Jodohkan pernyataan Kolom A dengan jawaban tepat di Kolom B. Pilih huruf A–G pada tiap soal. Skor maksimal bagian ini <strong>10</strong>.</p></div>
+    <div class="sec-head"><span class="sec-num">Bagian III · Soal 26–30</span><h2 id="judul-ujian3">Menjodohkan</h2><p>Jodohkan tiap pernyataan dengan jawaban yang tepat. Pilihan jawaban untuk tiap soal adalah kelima jawaban dari soal-soal Menjodohkan pada sesi ini.</p></div>
     <div class="card">
-      <h3>Kolom B — Pilihan Jawaban</h3>
-      <div class="table-scroll"><table><thead><tr><th>Huruf</th><th>Jawaban</th></tr></thead><tbody>
-        <tr><td><strong>A</strong></td><td>8</td></tr>
-        <tr><td><strong>B</strong></td><td>32</td></tr>
-        <tr><td><strong>C</strong></td><td>4 ¼</td></tr>
-        <tr><td><strong>D</strong></td><td>25%</td></tr>
-        <tr><td><strong>E</strong></td><td>480 gram</td></tr>
-        <tr><td><strong>F</strong></td><td>-8 (pengecoh)</td></tr>
-        <tr><td><strong>G</strong></td><td>20% (pengecoh)</td></tr>
-      </tbody></table></div>
+      <div id="matchPool"></div>
       <div id="matchBox" class="stack" style="margin-top:16px"></div>
     </div>
   </section>
 
   <section id="ujian4" aria-labelledby="judul-ujian4">
-    <div class="sec-head"><span class="sec-num">Bagian IV · Soal 31–35 · 2 poin per soal</span><h2 id="judul-ujian4">Isian Singkat</h2><p>Isilah titik-titik dengan jawaban singkat dan tepat. Skor maksimal bagian ini <strong>10</strong>.</p></div>
+    <div class="sec-head"><span class="sec-num">Bagian IV · Soal 31–35 · Cek mandiri</span><h2 id="judul-ujian4">Isian Singkat</h2><p>Isilah titik-titik dengan jawaban singkat dan tepat. Tulis angka saja, tanpa satuan. Soal ini dicek mandiri setelah selesai — tidak masuk nilai.</p></div>
     <div class="card"><div id="isianBox" class="stack"></div></div>
   </section>
 
   <section id="ujian5" aria-labelledby="judul-ujian5">
-    <div class="sec-head"><span class="sec-num">Bagian V · Soal 36–40 · 6 poin per soal</span><h2 id="judul-ujian5">Uraian / Essay</h2><p>Jawablah dengan menuliskan langkah-langkah penyelesaian lengkap. Soal uraian dinilai mandiri setelah dikumpulkan. Skor maksimal bagian ini <strong>30</strong>.</p></div>
+    <div class="sec-head"><span class="sec-num">Bagian V · Soal 36–40 · Cek mandiri</span><h2 id="judul-ujian5">Uraian / Essay</h2><p>Jawablah dengan menuliskan langkah-langkah penyelesaian lengkap. Soal ini dicek mandiri setelah selesai — tidak masuk nilai.</p></div>
     <div class="card"><div id="uraianBox" class="stack"></div></div>
   </section>
 
@@ -188,44 +192,29 @@
   </div>
 </section>
 
-<!-- ================= LAYAR PENILAIAN URAIAN ================= -->
-<section id="layarUraian" aria-labelledby="judul-uraian-panel" hidden>
-  <div class="sec-head">
-    <span class="sec-num">Penilaian mandiri · Bagian V</span>
-    <h2 id="judul-uraian-panel">Nilai Uraianmu Sendiri</h2>
-    <p id="uraianAutoInfo">Skor otomatis sedang dihitung…</p>
-    <p>Bandingkan tiap jawaban uraianmu dengan pembahasan dan rubrik di bawah, lalu isi <strong>skor mandiri 0–6</strong> per soal dengan jujur. Setelah disimpan, hasil akhirmu tampil dan (bila diatur guru) terkirim ke Google Sheets.</p>
-  </div>
-  <div class="card"><div id="uraianPanelBox" class="stack"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-      <button class="btn btn-primary" type="button" id="btnSimpanUraian">Simpan Skor Uraian &amp; Lihat Hasil Akhir</button>
-    </div>
-    <div class="feedback" id="uraianFb" aria-live="polite"></div>
-  </div>
-</section>
-
 <!-- ================= LAYAR HASIL ================= -->
 <section id="layarHasil" aria-labelledby="judul-hasil" hidden>
   <div class="sec-head">
-    <span class="sec-num">Hasil akhir · Skor maksimal 100 · KKM 70</span>
+    <span class="sec-num">Hasil akhir · Nilai maksimal 100 · KKM 70</span>
     <h2 id="judul-hasil">Hasil Akhirmu</h2>
     <p id="hasilSiapa" class="muted"></p>
   </div>
   <div class="card" id="hasilCard">
     <div class="quiz-result">
-      <div class="score-ring" id="hasilRing" style="--p:0%"><div class="score-ring-inner"><div><strong style="font-size:1.6rem" id="hasilTotal">—/100</strong><br><span class="muted small">skor total</span></div></div></div>
+      <div class="score-ring" id="hasilRing" style="--p:0%"><div class="score-ring-inner"><div><strong style="font-size:1.6rem" id="hasilTotal">—/100</strong><br><span class="muted small">nilai</span></div></div></div>
       <h3 id="hasilMsg" style="margin-top:14px">—</h3>
     </div>
     <div class="table-scroll" style="margin-top:16px">
       <table>
-        <thead><tr><th>Bagian</th><th class="num">Skor</th><th class="num">Maksimal</th></tr></thead>
+        <thead><tr><th>Bagian</th><th class="num">Hasil</th><th class="num">Maksimal</th></tr></thead>
         <tbody>
-          <tr><td>I · Pilihan Ganda</td><td class="num" id="tPg">—</td><td class="num">40</td></tr>
-          <tr><td>II · Benar / Salah</td><td class="num" id="tBs">—</td><td class="num">10</td></tr>
-          <tr><td>III · Menjodohkan</td><td class="num" id="tMatch">—</td><td class="num">10</td></tr>
-          <tr><td>IV · Isian Singkat</td><td class="num" id="tIsian">—</td><td class="num">10</td></tr>
-          <tr><td>V · Uraian (dinilai mandiri)</td><td class="num" id="tUraian">—</td><td class="num">30</td></tr>
-          <tr><td><strong>TOTAL</strong></td><td class="num"><strong id="tTotal">—</strong></td><td class="num"><strong>100</strong></td></tr>
+          <tr><td>I · Pilihan Ganda (benar)</td><td class="num" id="tPg">—</td><td class="num">20</td></tr>
+          <tr><td>II · Benar / Salah (benar)</td><td class="num" id="tBs">—</td><td class="num">5</td></tr>
+          <tr><td>III · Menjodohkan (benar)</td><td class="num" id="tMatch">—</td><td class="num">5</td></tr>
+          <tr><td>IV · Isian Singkat (dijawab, cek mandiri)</td><td class="num" id="tIsian">—</td><td class="num">5</td></tr>
+          <tr><td>V · Uraian (dijawab, cek mandiri)</td><td class="num" id="tUraian">—</td><td class="num">5</td></tr>
+          <tr><td><strong>Total Benar Otomatis</strong></td><td class="num"><strong id="tTotalBenar">—</strong></td><td class="num"><strong>30</strong></td></tr>
+          <tr><td><strong>NILAI</strong></td><td class="num"><strong id="tTotal">—</strong></td><td class="num"><strong>100</strong></td></tr>
         </tbody>
       </table>
     </div>
@@ -235,10 +224,8 @@
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
       <button class="btn btn-primary" type="button" id="btnUlangi">Ulangi Simulasi</button>
-      <a class="btn btn-ghost" href="https://holizon-sendang.github.io/MPI/kelas-7/latihan-asas/index.html">Latihan ASAS (tanpa timer)</a>
-      <a class="btn btn-ghost" href="https://holizon-sendang.github.io/MPI/kelas-7/index.html">← Kembali ke Daftar Modul Kelas 7</a>
+      <a class="btn btn-ghost" href="index.html">Kembali ke Beranda</a>
     </div>
-    <p class="muted small" style="margin-top:12px;text-align:center">Sumber soal: Kunci Jawaban &amp; Pedoman Penskoran ASAS Matematika Kelas VII TP 2025/2026 — MGMP Kabupaten Lampung Tengah.</p>
   </div>
 
   <div class="card" style="margin-top:16px">
@@ -259,8 +246,7 @@
 
 <footer>
   <div class="wrap">
-    <p><a href="https://holizon-sendang.github.io/MPI/kelas-7/latihan-asas/index.html">← Latihan ASAS</a> · <a href="https://holizon-sendang.github.io/MPI/kelas-7/index.html">Daftar Modul Kelas 7</a> · <a href="index.html">Beranda</a> · Modul berikutnya: <a href="https://holizon-sendang.github.io/MPI/kelas-7/a1-bentuk-aljabar/index.html">A.1 Bentuk Aljabar</a></p>
-    <p>MPI Matematika SMP — Simulasi ASAS Matematika Kelas 7, TP 2025/2026. Kurikulum Merdeka Fase D, MGMP Lampung Tengah. © <span data-year>2026</span></p>
+    <p>Simulasi ASAS Matematika Kelas 7 — SMP Negeri 2 Sendang Agung · © <span data-year>2026</span></p>
   </div>
 </footer>
 <script src="assets/js/main.js"></script>

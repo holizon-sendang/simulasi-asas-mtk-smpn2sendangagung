@@ -19,10 +19,13 @@
  */
 
 // Header kolom — HARUS sama persis dengan baris 1 di Sheet.
+// Nilai = round(Total Benar Otomatis / 30 * 100). Isian dan Uraian
+// dicek mandiri dan tidak masuk Nilai; kolom Isian/Uraian Dijawab
+// hanya mencatat berapa soal yang diisi siswa.
 var HEADERS = [
   'Waktu', 'Nama', 'Kelas',
-  'Skor PG', 'Skor Benar-Salah', 'Skor Menjodohkan', 'Skor Isian', 'Skor Uraian',
-  'Total', 'Nilai', 'Durasi (menit)', 'Status'
+  'PG Benar', 'Benar-Salah Benar', 'Menjodohkan Benar', 'Total Benar Otomatis',
+  'Nilai', 'Durasi (menit)', 'Status', 'Isian Dijawab', 'Uraian Dijawab'
 ];
 
 // doPost: dipanggil halaman simulasi setiap kali hasil akhir tampil.
@@ -45,15 +48,15 @@ function doPost(e) {
       data['Waktu'] || '',
       data['Nama'] || '',
       data['Kelas'] || '',
-      data['Skor PG'] ?? '',
-      data['Skor Benar-Salah'] ?? '',
-      data['Skor Menjodohkan'] ?? '',
-      data['Skor Isian'] ?? '',
-      data['Skor Uraian'] ?? '',
-      data['Total'] ?? '',
+      data['PG Benar'] ?? '',
+      data['Benar-Salah Benar'] ?? '',
+      data['Menjodohkan Benar'] ?? '',
+      data['Total Benar Otomatis'] ?? '',
       data['Nilai'] ?? '',
       data['Durasi (menit)'] ?? '',
-      data['Status'] || ''
+      data['Status'] || '',
+      data['Isian Dijawab'] ?? '',
+      data['Uraian Dijawab'] ?? ''
     ]);
 
     // 5. Balas JSON sukses ke halaman simulasi.
