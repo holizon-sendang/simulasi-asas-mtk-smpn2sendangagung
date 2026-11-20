@@ -51,6 +51,15 @@
   var KEY_HISTORY = 'mpi-simulasi-asas-k7-history';
   var KEY_SHEET = 'mpi-simulasi-asas-k7-sheet-url';
   var KEY_PENDING = 'mpi-simulasi-asas-k7-pending';
+  /* URL Web App Google Sheets TERTANAM di situs (2026-11-20), supaya nilai
+     otomatis terkirim dari semua perangkat siswa tanpa perlu menempel URL
+     di tiap perangkat. URL yang ditempel lewat input tetap menang (override);
+     mengosongkan input dan menyimpannya kembali ke URL tertanam ini. */
+  var DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxoLyiRAGsDMPkOXwNULrv0S64zubd4OFWUPuCvjI-tVfEHfjowSylAiR1VcMhC7vyOrg/exec';
+  function getSheetUrl() {
+    var saved = (read(KEY_SHEET, '') || '').trim();
+    return saved || DEFAULT_SHEET_URL;
+  }
 
   /* ---------- Bank soal (dimuat dari JSON) ---------- */
   var BANK = null;
@@ -143,10 +152,12 @@
 
   /* ---------- Google Sheets: URL ---------- */
   function renderSheetSetting() {
-    var url = read(KEY_SHEET, '');
-    var inp = $('sheetUrlInput'); if (inp && !inp.value) inp.value = url;
+    var saved = (read(KEY_SHEET, '') || '').trim();
+    var inp = $('sheetUrlInput'); if (inp && !inp.value) inp.value = saved;
     var st = $('sheetStatus');
-    if (st) st.textContent = url ? 'Tersimpan. Nilai akan otomatis terkirim ke Google Sheets saat hasil akhir tampil.' : 'Belum diatur — nilai hanya tersimpan di perangkat ini.';
+    if (st) st.textContent = saved
+      ? 'Tersimpan (URL guru). Nilai akan otomatis terkirim ke Google Sheets saat hasil akhir tampil.'
+      : 'URL Web App sudah tertanam di situs — nilai otomatis terkirim ke Google Sheets dari semua perangkat saat hasil akhir tampil.';
   }
 
   /* ---------- Timer ---------- */
@@ -473,7 +484,7 @@
   }
   function renderSendStatus() {
     var el = $('sendStatus'); if (!el) return;
-    var url = read(KEY_SHEET, '');
+    var url = getSheetUrl();
     if (!url) { el.textContent = 'Belum diatur — nilai hanya tersimpan di perangkat ini.'; el.className = 'feedback show'; return; }
     if (draft.sent) { el.textContent = 'Terkirim ke Google Sheets ✓ (' + fmtWaktu(draft.sentAt || Date.now()) + ')'; el.className = 'feedback ok show'; return; }
     var pend = read(KEY_PENDING, null);
@@ -481,7 +492,7 @@
     el.className = 'feedback show';
   }
   function kirimKeSheet(isRetry) {
-    var url = read(KEY_SHEET, '');
+    var url = getSheetUrl();
     if (!url) { renderSendStatus(); return; }
     if (draft.sent && !isRetry) { renderSendStatus(); return; }
     var payload = buildPayload();

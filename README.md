@@ -14,7 +14,7 @@ Situs ini khusus untuk simulasi ASAS — bukan bagian dari MPI.
 - Timer 120 menit, jawaban otomatis dikumpulkan saat waktu habis (lanjut setelah refresh)
 - Penilaian: Nilai = jawaban benar otomatis / 30 × 100 (hanya Pilihan Ganda, Benar-Salah, dan Menjodohkan yang dinilai otomatis). Isian Singkat dan Uraian dicek mandiri dengan kunci dan pembahasan — tidak masuk Nilai. KKM 70.
 - Riwayat skor tersimpan di perangkat siswa
-- Pengiriman nilai ke Google Sheets (satu baris per siswa) — lihat `PANDUAN-GOOGLE-SHEETS.md`
+- Pengiriman nilai ke Google Sheets (satu baris per siswa) — URL Web App sudah tertanam di situs sejak 2026-11-20, jadi tidak perlu ditempel di tiap perangkat; lihat `PANDUAN-GOOGLE-SHEETS.md`
 
 ## File
 

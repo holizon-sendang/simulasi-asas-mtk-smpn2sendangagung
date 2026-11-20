@@ -120,13 +120,13 @@
 
   <div class="card" style="margin-top:16px">
     <h3 style="margin-top:0">Pengiriman Nilai ke Google Sheets (untuk Guru)</h3>
-    <p class="muted">Kalau kolom ini belum diisi, nilai hanya tersimpan di perangkat siswa. Kalau guru sudah menempel URL Web App Apps Script di sini, nilai otomatis terkirim ke Sheet guru saat hasil akhir tampil. Lihat panduan di <code>PANDUAN-GOOGLE-SHEETS.md</code> (di folder yang sama dengan halaman ini).</p>
-    <label class="f-label" for="sheetUrlInput">URL Web App Apps Script</label>
+    <p class="muted">URL Web App sudah tertanam di situs — nilai siswa otomatis terkirim ke Sheet guru dari semua perangkat saat hasil akhir tampil, tanpa perlu menempel URL di tiap perangkat. Kolom di bawah ini hanya perlu diisi bila URL Web App diganti (misalnya Sheet baru); kosongkan dan simpan untuk kembali ke URL yang tertanam. Lihat panduan di <code>PANDUAN-GOOGLE-SHEETS.md</code> (di folder yang sama dengan halaman ini).</p>
+    <label class="f-label" for="sheetUrlInput">URL Web App Apps Script (ganti URL — kosongkan untuk kembali ke URL tertanam)</label>
     <input type="url" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/AKfyc.../exec" inputmode="url" />
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
       <button class="btn btn-ghost" type="button" id="btnSimpanSheet">Simpan URL</button>
     </div>
-    <p class="muted small" id="sheetStatus" style="margin:10px 0 0">Belum diatur — nilai hanya tersimpan di perangkat ini.</p>
+    <p class="muted small" id="sheetStatus" style="margin:10px 0 0">URL Web App sudah tertanam di situs — nilai otomatis terkirim ke Google Sheets dari semua perangkat saat hasil akhir tampil.</p>
   </div>
 
   <div class="card" style="margin-top:16px">

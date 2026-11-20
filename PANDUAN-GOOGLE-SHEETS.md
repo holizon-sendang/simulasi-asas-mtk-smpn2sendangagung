@@ -4,6 +4,8 @@ Panduan ini untuk guru. Tujuannya: **semua nilai siswa yang menyelesaikan Simula
 
 Kalau langkah ini belum dilakukan, simulasi tetap bisa dipakai — nilai hanya tersimpan di perangkat siswa masing-masing (riwayat skor di halaman).
 
+> **Catatan 2026-11-20:** URL Web App sudah tertanam langsung di `script.js` situs ini, jadi nilai otomatis terkirim dari semua perangkat siswa tanpa perlu menempel URL. Langkah 4 di bawah hanya diperlukan bila URL Web App diganti (misalnya Sheet baru).
+
 ---
 
 ## Yang dibutuhkan
@@ -53,14 +55,18 @@ Waktu	Nama	Kelas	PG Benar	Benar-Salah Benar	Menjodohkan Benar	Total Benar Otomat
 
 > Catatan: kalau nanti kode diubah, ulangi Deploy → pilih deployment yang sama → **New version** → Deploy, supaya URL tetap sama.
 
-## Langkah 4 — Tempel URL di halaman Simulasi ASAS
+## Langkah 4 — Tempel URL di halaman Simulasi ASAS (hanya bila URL diganti)
+
+**Sejak 2026-11-20, langkah ini TIDAK lagi wajib untuk tiap perangkat** — URL Web App dari Langkah 3 sudah tertanam di situs, jadi nilai siswa otomatis terkirim dari semua perangkat tanpa ditempel manual.
+
+Langkah ini hanya diperlukan bila URL Web App diganti (misalnya Sheet baru):
 
 1. Buka halaman **Simulasi ASAS — Matematika Kelas 7** di repo ini.
 2. Di layar mulai, cari bagian **"Pengiriman Nilai ke Google Sheets (untuk Guru)"**.
-3. Tempel URL `/exec` dari Langkah 3 ke kolomnya, tekan **Simpan URL**.
-4. Status berubah menjadi "Tersimpan. Nilai akan otomatis terkirim…". URL ini tersimpan di perangkat (browser) yang dipakai untuk menempel — **jadi lakukan Langkah 4 ini di perangkat yang sama dengan yang dipakai siswa, atau di tiap perangkat/laptop kelas** (atau bagikan URL ke siswa lewat guru dan minta mereka menempelkannya sekali sebelum mulai; lebih praktis: guru yang menyiapkan perangkat kelas terlebih dahulu).
+3. Tempel URL `/exec` yang baru ke kolomnya, tekan **Simpan URL**.
+4. Status berubah menjadi "Tersimpan (URL guru). Nilai akan otomatis terkirim…". URL pengganti ini tersimpan di perangkat (browser) tempat menempel dan mengalahkan URL tertanam di perangkat itu saja. Untuk kembali ke URL tertanam, kosongkan kolomnya lalu tekan **Simpan URL**.
 
-> Praktik yang disarankan: siapkan satu laptop/HP kelas atau minta siswa menempel URL sekali di awal semester. URL tidak di-hardcode di halaman, jadi guru bisa menggantinya kapan saja tanpa mengubah file.
+> Kalau URL diganti untuk semua siswa (bukan hanya satu perangkat), minta URL baru itu ditanam ke `script.js` situs ini — sama seperti URL pertama ditanam pada 2026-11-20.
 
 ## Langkah 5 — Uji dengan satu simulasi
 
