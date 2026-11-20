@@ -16,13 +16,6 @@
 .kelas-card:disabled{opacity:.55;cursor:not-allowed;background:var(--bg2)}
 @media (max-width:640px){ .kelas-picker{grid-template-columns:1fr} }
 
-/* Navigasi bagian: menempel di atas, bisa digeser horizontal di HP */
-.subnav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.subnav-inner{max-width:var(--wrap);margin:0 auto;padding:10px 20px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.subnav-inner::-webkit-scrollbar{display:none}
-.subnav a{flex:0 0 auto;text-decoration:none;color:var(--ink);font-size:.85rem;font-weight:700;padding:9px 13px;min-height:var(--tap);display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);white-space:nowrap}
-.subnav a:hover{border-color:var(--teal);color:var(--teal)}
-
 /* Header */
 .module-hero{padding-top:clamp(24px,5vw,40px)}
 .tp-box{background:var(--teal);color:#fff;border-radius:16px;padding:16px 18px}
@@ -108,8 +101,6 @@
   .isian-row .soal-q{flex:1 1 auto}
 }
 @media (max-width:480px){
-  .subnav{top:0}
-  .subnav-inner{padding:8px 16px}
   .timer-bar{top:0}
   #timerText{font-size:1.25rem}
 }
@@ -132,3 +123,36 @@
 .ok-text{color:var(--teal)}
 .no-text{color:var(--coral)}
 .jawaban-siswa{white-space:pre-wrap}
+
+/* Layar ujian: satu soal per layar + grid nomor 1-40 */
+.exam-layout{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+.nav-panel{order:-1}
+@media (min-width:900px){
+  .exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start}
+  .exam-main{grid-column:1;grid-row:1}
+  .nav-panel{order:0;grid-column:2;grid-row:1;position:sticky;top:16px}
+}
+.soal-meta{font-size:.85rem;font-weight:700;color:var(--muted);margin:0 0 12px}
+.soal-meta span{color:var(--ink)}
+#soalNomor{color:var(--teal);font-size:.95rem}
+#soalBox select,#soalBox input[type="text"]{max-width:340px;width:100%}
+#soalBox textarea{min-height:140px}
+.soal-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.soal-nav .btn{flex:1 1 0;min-height:48px}
+@media (min-width:640px){ .soal-nav .btn{flex:0 1 auto;min-width:170px} }
+.nav-panel-title{margin:0 0 4px}
+.nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.nav-num{appearance:none;font-family:inherit;font-weight:800;font-size:.95rem;min-height:44px;border-radius:10px;border:1.5px solid var(--line);background:var(--card2);color:var(--ink);cursor:pointer;padding:0}
+.nav-num:hover{border-color:var(--teal)}
+.nav-num.answered{background:var(--teal);border-color:var(--teal);color:#fff}
+.nav-num.current{outline:3px solid var(--amber);outline-offset:1px}
+.nav-selesai{width:100%;margin-top:14px}
+.nav-legend{margin:12px 0 0;line-height:1.9}
+.legend-dot{display:inline-block;width:12px;height:12px;border-radius:4px;border:1.5px solid var(--line);background:var(--card2);vertical-align:-1px}
+.legend-answered{background:var(--teal);border-color:var(--teal)}
+.legend-current{background:var(--card2);border-color:var(--amber);box-shadow:0 0 0 2px var(--amber)}
+.legend-empty{background:var(--card2)}
+/* Modal konfirmasi selesai */
+.modal-backdrop{position:fixed;inset:0;z-index:80;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:20px}
+.modal-backdrop[hidden]{display:none}
+.modal-card{max-width:440px;width:100%}

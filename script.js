@@ -7,8 +7,9 @@
    Menjodohkan 26-30, Isian Singkat 31-35, Uraian 36-40), urutan
    pilihan PG diacak, dan pilihan Menjodohkan tiap soal adalah
    kelima jawaban dari soal-soal Menjodohkan pada sesi itu.
-   Alur: layar mulai -> ujian 120 menit (timer) -> kumpul ->
-   hasil akhir -> kirim ke Google Sheets (opsional).
+   Alur: layar mulai -> ujian 120 menit (timer, satu soal per layar
+   + grid nomor 1-40) -> kumpul -> hasil akhir -> kirim ke
+   Google Sheets (opsional).
    Penilaian: nilai = round(benar_otomatis / 30 * 100); yang dinilai
    otomatis hanya PG + Benar-Salah + Menjodohkan (30 soal).
    Isian Singkat dan Uraian dicek mandiri, tidak masuk nilai.
@@ -96,7 +97,7 @@
   function blankAnswers() { return []; }
   function blankDraft() {
     return { nama: '', kelas: '', startedAt: 0, status: 'baru', session: [], answers: blankAnswers(),
-      auto: null, total: null, submittedAt: 0, finishedAt: 0,
+      currentSoal: 0, auto: null, total: null, submittedAt: 0, finishedAt: 0,
       durationMin: 0, sent: false, sentAt: 0 };
   }
   var draft = blankDraft();
@@ -107,6 +108,7 @@
     if (d0 && Array.isArray(d0.session) && d0.session.length === 40 && Array.isArray(d0.answers)) draft = d0;
   } catch (e) { /* abaikan */ }
   if (!Array.isArray(draft.answers)) draft.answers = [];
+  if (typeof draft.currentSoal !== 'number' || draft.currentSoal < 0 || draft.currentSoal > 39) draft.currentSoal = 0;
   var timerId = null;
   var submitting = false;
 
@@ -166,130 +168,152 @@
   function startTimer() { stopTimer(); tickTimer(); timerId = setInterval(tickTimer, 1000); }
   function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
 
-  /* ---------- Render soal ujian ---------- */
-  function renderPG() {
-    var box = $('pgBox'); if (!box) return; box.innerHTML = '';
-    sessionByType('PG').forEach(function (o) {
-      var item = o.q, idx = o.idx;
-      var div = document.createElement('div'); div.className = 'soal'; div.id = 'pg-' + idx;
-      var html = '<p class="soal-q">' + (idx + 1) + '. ' + esc(item.soal) + '</p>' + imgHtml(item) +
-        '<div class="pg-opts" role="group" aria-label="Pilihan jawaban soal ' + (idx + 1) + '">';
-      (item._options || item.pilihan || []).forEach(function (opt, oi) {
-        html += '<button type="button" class="opt-btn" data-i="' + idx + '" data-opt="' + esc(opt) + '"' +
-          (draft.answers[idx] === opt ? ' aria-pressed="true"' : ' aria-pressed="false"') + '><span class="letter">' + LETTERS[oi] + '</span><span>' + esc(opt) + '</span></button>';
-      });
-      html += '</div>';
-      div.innerHTML = html; box.appendChild(div);
+  /* ---------- Render soal ujian: satu soal per layar + grid nomor ---------- */
+  var TYPE_LABEL = {
+    'PG': 'Pilihan Ganda',
+    'Benar-Salah': 'Benar / Salah',
+    'Menjodohkan': 'Menjodohkan',
+    'Isian Singkat': 'Isian Singkat',
+    'Uraian': 'Uraian'
+  };
+  function currentIdx() {
+    if (typeof draft.currentSoal !== 'number' || draft.currentSoal < 0 || draft.currentSoal > 39) draft.currentSoal = 0;
+    return draft.currentSoal;
+  }
+  function isAnsweredIdx(i) {
+    var a = draft.answers[i];
+    return a !== null && a !== undefined && String(a).trim() !== '';
+  }
+  function renderNavGrid() {
+    var grid = $('navGrid'); if (!grid) return;
+    if (!grid.hasChildNodes()) {
+      for (var n = 0; n < 40; n++) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'nav-num'; b.setAttribute('data-n', String(n));
+        b.textContent = String(n + 1);
+        b.setAttribute('aria-label', 'Soal ' + (n + 1));
+        b.addEventListener('click', function () {
+          if (draft.status !== 'berjalan') return;
+          goToSoal(Number(this.getAttribute('data-n')));
+        });
+        grid.appendChild(b);
+      }
+    }
+    updateNavGrid();
+  }
+  function updateNavGrid() {
+    var grid = $('navGrid'); if (!grid) return;
+    var cur = currentIdx();
+    grid.querySelectorAll('.nav-num').forEach(function (b) {
+      var n = Number(b.getAttribute('data-n'));
+      b.classList.toggle('answered', isAnsweredIdx(n));
+      b.classList.toggle('current', n === cur);
+      b.setAttribute('aria-current', n === cur ? 'true' : 'false');
     });
+    var c = $('navCount');
+    if (c) { var n2 = countAnswered(); c.textContent = 'Dijawab ' + n2 + ' dari 40 · Belum ' + (40 - n2); }
+  }
+  function renderSoal() {
+    var box = $('soalBox'); if (!box || !draft.session || draft.session.length !== 40) return;
+    var idx = currentIdx();
+    var item = draft.session[idx];
+    var nomor = $('soalNomor'); if (nomor) nomor.textContent = 'Soal ' + (idx + 1) + ' dari 40';
+    var tipe = $('soalTipe'); if (tipe) tipe.textContent = TYPE_LABEL[item.tipe] || item.tipe;
+    var mat = $('soalMateri'); if (mat) mat.textContent = item.materi || '';
+    var html = '';
+    var ans = draft.answers[idx];
+    if (item.tipe === 'PG') {
+      html = '<p class="soal-q">' + esc(item.soal) + '</p>' + imgHtml(item) +
+        '<div class="pg-opts" role="group" aria-label="Pilihan jawaban soal ' + (idx + 1) + '">';
+      /* Urutan pilihan sudah diacak saat sesi dibangun (_options);
+         render ulang TIDAK mengacak lagi, jadi jawaban tidak berpindah. */
+      (item._options || item.pilihan || []).forEach(function (opt, oi) {
+        html += '<button type="button" class="opt-btn" data-opt="' + esc(opt) + '"' +
+          (ans === opt ? ' aria-pressed="true"' : ' aria-pressed="false"') + '><span class="letter">' + LETTERS[oi] + '</span><span>' + esc(opt) + '</span></button>';
+      });
+      html += '</div><p class="muted small" style="margin-top:12px">Pilihlah satu jawaban yang paling tepat (A, B, C, atau D).</p>';
+    } else if (item.tipe === 'Benar-Salah') {
+      html = '<p class="soal-q">' + esc(item.soal) + '</p>' + imgHtml(item) +
+        '<div class="bs-opts" role="group" aria-label="Pilih BENAR atau SALAH soal ' + (idx + 1) + '">' +
+        '<button type="button" class="btn btn-ghost' + (ans === 'Benar' ? ' picked-benarsalah' : '') + '" data-val="Benar"' + (ans === 'Benar' ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>BENAR</button>' +
+        '<button type="button" class="btn btn-ghost' + (ans === 'Salah' ? ' picked-benarsalah' : '') + '" data-val="Salah"' + (ans === 'Salah' ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>SALAH</button></div>';
+    } else if (item.tipe === 'Menjodohkan') {
+      var opts = '<option value="">— Pilih jawaban —</option>';
+      (item._options || []).forEach(function (t) {
+        opts += '<option value="' + esc(t) + '"' + (ans === t ? ' selected' : '') + '>' + esc(t) + '</option>';
+      });
+      html = '<p class="soal-q">' + esc(item.soal) + '</p>' + imgHtml(item) +
+        '<p class="muted small">Pilihan jawaban untuk tiap soal adalah kelima jawaban dari soal-soal Menjodohkan pada sesi ini.</p>' +
+        '<select aria-label="Jawaban menjodohkan soal ' + (idx + 1) + '">' + opts + '</select>';
+    } else if (item.tipe === 'Isian Singkat') {
+      var val = ans !== undefined && ans !== null ? ans : '';
+      html = '<p class="soal-q">' + esc(item.soal) + '</p>' + imgHtml(item) +
+        '<input type="text" inputmode="decimal" aria-label="Jawaban isian soal ' + (idx + 1) + '" value="' + esc(val) + '" placeholder="Tulis angka saja, tanpa satuan" />' +
+        '<p class="muted small" style="margin-top:12px">Soal ini dicek mandiri setelah selesai — tidak masuk nilai.</p>';
+    } else if (item.tipe === 'Uraian') {
+      var txt = ans || '';
+      html = '<p class="soal-q">' + esc(item.soal) + '</p>' + imgHtml(item) +
+        '<div class="uraian-jawab"><label class="f-label" for="ur-txt">Jawabanmu (tulis langkah-langkahnya):</label>' +
+        '<textarea id="ur-txt" placeholder="Tulis langkah penyelesaian lengkap di sini...">' + esc(txt) + '</textarea></div>' +
+        '<p class="muted small">Soal ini dicek mandiri setelah selesai — tidak masuk nilai.</p>';
+    }
+    box.innerHTML = html;
+    bindSoalControls(idx);
+    updateNavButtons();
+    updateNavGrid();
+  }
+  function bindSoalControls(idx) {
+    var box = $('soalBox'); if (!box) return;
     box.querySelectorAll('.opt-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         if (draft.status !== 'berjalan') return;
-        var i = Number(btn.getAttribute('data-i'));
-        draft.answers[i] = btn.getAttribute('data-opt'); saveDraft();
-        var row = $('pg-' + i);
-        row.querySelectorAll('.opt-btn').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        draft.answers[idx] = btn.getAttribute('data-opt'); saveDraft();
+        box.querySelectorAll('.opt-btn').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
         updateAnswered();
       });
-    });
-  }
-  function renderBS() {
-    var box = $('bsBox'); if (!box) return; box.innerHTML = '';
-    sessionByType('Benar-Salah').forEach(function (o) {
-      var item = o.q, idx = o.idx;
-      var div = document.createElement('div'); div.className = 'soal'; div.id = 'bs-' + idx;
-      var picked = draft.answers[idx];
-      div.innerHTML = '<p class="soal-q">' + (idx + 1) + '. ' + esc(item.soal) + '</p>' + imgHtml(item) +
-        '<div class="bs-opts" role="group" aria-label="Pilih BENAR atau SALAH soal ' + (idx + 1) + '">' +
-        '<button type="button" class="btn btn-ghost" data-i="' + idx + '" data-val="Benar"' + (picked === 'Benar' ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>BENAR</button>' +
-        '<button type="button" class="btn btn-ghost" data-i="' + idx + '" data-val="Salah"' + (picked === 'Salah' ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>SALAH</button></div>';
-      box.appendChild(div);
     });
     box.querySelectorAll('.bs-opts .btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         if (draft.status !== 'berjalan') return;
-        var i = Number(btn.getAttribute('data-i'));
-        draft.answers[i] = btn.getAttribute('data-val'); saveDraft();
-        var row = $('bs-' + i);
-        row.querySelectorAll('.bs-opts .btn').forEach(function (b) {
+        draft.answers[idx] = btn.getAttribute('data-val'); saveDraft();
+        box.querySelectorAll('.bs-opts .btn').forEach(function (b) {
           var on = b === btn; b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('picked-benarsalah', on);
         });
         updateAnswered();
       });
     });
-  }
-  function renderMatch() {
-    var box = $('matchBox'); if (!box) return; box.innerHTML = '';
-    /* Kolom B sesi ini: kelima jawaban Menjodohkan pada sesi ini. */
-    var poolBox = $('matchPool');
-    var pool = sessionByType('Menjodohkan').length ? (sessionByType('Menjodohkan')[0].q._options || []) : [];
-    if (poolBox) {
-      poolBox.innerHTML = pool.length
-        ? '<p class="muted small">Pilihan jawaban untuk tiap soal adalah kelima jawaban berikut (diacak tiap soal):</p><p><strong>' + pool.map(esc).join(' &nbsp;·&nbsp; ') + '</strong></p>'
-        : '';
-    }
-    sessionByType('Menjodohkan').forEach(function (o) {
-      var item = o.q, idx = o.idx;
-      var div = document.createElement('div'); div.className = 'soal match-row'; div.id = 'match-' + idx;
-      var opts = '<option value="">— Pilih jawaban —</option>';
-      (item._options || []).forEach(function (t) {
-        opts += '<option value="' + esc(t) + '"' + (draft.answers[idx] === t ? ' selected' : '') + '>' + esc(t) + '</option>';
-      });
-      div.innerHTML = '<p class="soal-q">' + (idx + 1) + '. ' + esc(item.soal) + '</p>' + imgHtml(item) +
-        '<select aria-label="Jawaban menjodohkan soal ' + (idx + 1) + '">' + opts + '</select>';
-      box.appendChild(div);
+    var sel = box.querySelector('select');
+    if (sel) sel.addEventListener('change', function () {
+      if (draft.status !== 'berjalan') return;
+      draft.answers[idx] = sel.value || null; saveDraft(); updateAnswered();
     });
-    box.querySelectorAll('select').forEach(function (sel) {
-      sel.addEventListener('change', function () {
-        if (draft.status !== 'berjalan') return;
-        var row = sel.closest('.soal'); if (!row) return;
-        var i = Number(row.id.replace('match-', ''));
-        draft.answers[i] = sel.value || null; saveDraft(); updateAnswered();
-      });
+    var inp = box.querySelector('input[type="text"]');
+    if (inp) inp.addEventListener('input', function () {
+      if (draft.status !== 'berjalan') return;
+      draft.answers[idx] = inp.value.trim() === '' ? null : inp.value.trim(); saveDraft(); updateAnswered();
+    });
+    var ta = box.querySelector('textarea');
+    if (ta) ta.addEventListener('input', function () {
+      if (draft.status !== 'berjalan') return;
+      draft.answers[idx] = ta.value.trim() === '' ? null : ta.value.trim(); saveDraft(); updateAnswered();
     });
   }
-  function renderIsian() {
-    var box = $('isianBox'); if (!box) return; box.innerHTML = '';
-    sessionByType('Isian Singkat').forEach(function (o) {
-      var item = o.q, idx = o.idx;
-      var div = document.createElement('div'); div.className = 'soal isian-row'; div.id = 'isian-' + idx;
-      var val = draft.answers[idx] !== undefined && draft.answers[idx] !== null ? draft.answers[idx] : '';
-      div.innerHTML = '<p class="soal-q">' + (idx + 1) + '. ' + esc(item.soal) + '</p>' + imgHtml(item) +
-        '<input type="text" inputmode="decimal" aria-label="Jawaban isian soal ' + (idx + 1) + '" value="' + esc(val) + '" placeholder="Tulis angka saja, tanpa satuan" />';
-      box.appendChild(div);
-    });
-    box.querySelectorAll('input').forEach(function (inp) {
-      inp.addEventListener('input', function () {
-        if (draft.status !== 'berjalan') return;
-        var row = inp.closest('.soal'); if (!row) return;
-        var i = Number(row.id.replace('isian-', ''));
-        draft.answers[i] = inp.value.trim() === '' ? null : inp.value.trim(); saveDraft(); updateAnswered();
-      });
-    });
+  function updateNavButtons() {
+    var idx = currentIdx();
+    var prev = $('btnPrev'), next = $('btnNext');
+    if (prev) prev.disabled = idx === 0;
+    if (next) next.textContent = idx === 39 ? 'Selesai & Lihat Nilai' : 'Berikutnya →';
   }
-  function renderUraianExam() {
-    var box = $('uraianBox'); if (!box) return; box.innerHTML = '';
-    sessionByType('Uraian').forEach(function (o) {
-      var item = o.q, idx = o.idx;
-      var div = document.createElement('div'); div.className = 'soal'; div.id = 'uraian-' + idx;
-      var txt = draft.answers[idx] || '';
-      div.innerHTML = '<p class="soal-q">' + (idx + 1) + '. ' + esc(item.soal) + '</p>' + imgHtml(item) +
-        '<div class="uraian-jawab"><label class="f-label" for="ur-txt-' + idx + '">Jawabanmu (tulis langkah-langkahnya):</label>' +
-        '<textarea id="ur-txt-' + idx + '" placeholder="Tulis langkah penyelesaian lengkap di sini...">' + esc(txt) + '</textarea></div>' +
-        '<p class="muted small">Soal ini dicek mandiri setelah selesai — tidak masuk nilai.</p>';
-      box.appendChild(div);
-    });
-    box.querySelectorAll('textarea').forEach(function (ta) {
-      ta.addEventListener('input', function () {
-        if (draft.status !== 'berjalan') return;
-        var row = ta.closest('.soal'); if (!row) return;
-        var i = Number(row.id.replace('uraian-', ''));
-        draft.answers[i] = ta.value.trim() === '' ? null : ta.value.trim(); saveDraft(); updateAnswered();
-      });
-    });
+  function goToSoal(i) {
+    if (!draft.session || draft.session.length !== 40) return;
+    draft.currentSoal = Math.max(0, Math.min(39, i));
+    saveDraft();
+    renderSoal();
+    var card = $('soalCard'); if (card && card.scrollIntoView) card.scrollIntoView({ block: 'nearest' });
   }
   function renderExam() {
     if (!draft.session || draft.session.length !== 40) return;
-    renderPG(); renderBS(); renderMatch(); renderIsian(); renderUraianExam(); updateAnswered();
+    renderNavGrid(); renderSoal(); updateAnswered();
   }
 
   /* ---------- Progres dijawab ---------- */
@@ -302,6 +326,7 @@
     var n = countAnswered();
     var t = $('answeredText'); if (t) t.textContent = n + ' dari 40 soal dijawab';
     var f = $('answeredFill'); if (f) f.style.width = Math.round(n / 40 * 100) + '%';
+    updateNavGrid();
   }
 
   /* ---------- Penilaian otomatis (30 soal) ---------- */
@@ -330,9 +355,7 @@
   }
   function disableExam() {
     var ex = $('layarUjian'); if (!ex) return;
-    ex.querySelectorAll('button, input, select, textarea').forEach(function (el) {
-      if (el.id !== 'btnKumpul') el.disabled = true;
-    });
+    ex.querySelectorAll('button, input, select, textarea').forEach(function (el) { el.disabled = true; });
   }
 
   /* ---------- Kumpulkan ---------- */
@@ -340,8 +363,15 @@
     if (draft.status !== 'berjalan' || submitting) return;
     var kosong = 40 - countAnswered();
     if (!otomatis && kosong > 0) {
-      if (!window.confirm('Masih ada ' + kosong + ' soal yang belum dijawab. Tetap kumpulkan jawaban sekarang?')) return;
+      var txt = $('confirmText');
+      if (txt) txt.textContent = 'Masih ada ' + kosong + ' soal belum dijawab. Tetap selesai dan kumpulkan jawaban sekarang?';
+      var modal = $('confirmSelesai'); if (modal) modal.hidden = false;
+      return;
     }
+    doKumpulkan();
+  }
+  function doKumpulkan() {
+    if (draft.status !== 'berjalan' || submitting) return;
     submitting = true;
     stopTimer();
     draft.auto = computeAuto();
@@ -574,7 +604,14 @@
   if (bMulai) bMulai.addEventListener('click', mulaiBaru);
   var btnLanjut = $('btnLanjut');
   if (btnLanjut) btnLanjut.addEventListener('click', lanjutkan);
-  var bKumpul = $('btnKumpul'); if (bKumpul) bKumpul.addEventListener('click', function () { kumpulkan(false); });
+  var bPrev = $('btnPrev'); if (bPrev) bPrev.addEventListener('click', function () { if (draft.status === 'berjalan') goToSoal(currentIdx() - 1); });
+  var bNext = $('btnNext'); if (bNext) bNext.addEventListener('click', function () {
+    if (draft.status !== 'berjalan') return;
+    if (currentIdx() === 39) kumpulkan(false); else goToSoal(currentIdx() + 1);
+  });
+  var bSelesai = $('btnSelesaiGrid'); if (bSelesai) bSelesai.addEventListener('click', function () { kumpulkan(false); });
+  var bLanjutJawab = $('btnLanjutJawab'); if (bLanjutJawab) bLanjutJawab.addEventListener('click', function () { var m = $('confirmSelesai'); if (m) m.hidden = true; });
+  var bTetap = $('btnTetapSelesai'); if (bTetap) bTetap.addEventListener('click', function () { var m = $('confirmSelesai'); if (m) m.hidden = true; doKumpulkan(); });
   var bUlangi = $('btnUlangi'); if (bUlangi) bUlangi.addEventListener('click', ulangi);
   var bSimpanSheet = $('btnSimpanSheet');
   if (bSimpanSheet) bSimpanSheet.addEventListener('click', function () {
